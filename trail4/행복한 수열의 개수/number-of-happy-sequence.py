@@ -14,8 +14,9 @@ else:
     for i in range(N):
         count = 1
         for j in range(1, N):
-            if matrix[i][j-1] == matrix[i][j]:
-                count += 1
+            if matrix[i][j-1] == matrix[i][j]: count += 1
+            else: count = 1 
+
             if count >= M:
                 ans += 1
                 break
@@ -23,11 +24,12 @@ else:
     for j in range(N):
         count = 1
         for i in range(1, N):
-            if matrix[i-1][j]== matrix[i][j]:
-                count += 1
-        
+            if matrix[i-1][j] == matrix[i][j]: count += 1
+            else: count = 1 
+
             if count >= M:
                 ans += 1
                 break
+            
 
 print(ans)
