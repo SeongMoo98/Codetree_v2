@@ -13,27 +13,28 @@
 N, M = map(int, input().split())
 matrix = [list(map(int, input().split())) for i in range(N)]
 
+MAX_K = 2 * N  # 이 이상 커지면 그리드 전체를 이미 덮고도 남아 의미 없음
 ans = 0
 
+# 1. 중심 좌표 순회
 for i in range(N):
     for j in range(N):
-        # 그리드 경계까지 가장 먼 거리를 넘어서면 금은 더 늘지 않고 비용만 커진다
-        max_k = max(i, N - 1 - i) + max(j, N - 1 - j)
 
-        count = matrix[i][j]
-        if count * M - 1 >= 0:  # k = 0: cost = 0^2 + 1^2 = 1
-            ans = max(ans, count)
+        # 2. 반지름 K 순회
+        for k in range(MAX_K + 1):
 
-        for k in range(1, max_k + 1):
-            for dx in range(-k, k + 1):
-                dy = k - abs(dx)
-                for sign in ((1, -1) if dy != 0 else (1,)):
-                    ni, nj = i + dx, j + dy * sign
-                    if 0 <= ni < N and 0 <= nj < N and matrix[ni][nj] == 1:
+            # 3. 이번 K로 만든 마름모 안의 금 개수 세기
+            count = 0
+            for x in range(N):
+                for y in range(N):
+                    if abs(x - i) + abs(y - j) <= k and matrix[x][y] == 1:
                         count += 1
+
+            # 4. 비용 계산
             cost = k**2 + (k + 1)**2
-            if count * M - cost >= 0:  # 손해가 아닌 경우만 후보로
+
+            # 5. 손해가 아니면 채굴 개수 후보로 등록
+            if count * M - cost >= 0:
                 ans = max(ans, count)
 
 print(ans)
-
