@@ -1,36 +1,30 @@
-n, m = map(int, input().split())
-grid = [list(map(int, input().split())) for _ in range(n)]
+# 트로미노
+# N x M 격자에 자연수 존재
+# 두 개의 블럭 중 한 개의 블록을 격자에 벗어나지 않게 칸 안에 적힌 숫자이 합이 최대
+# 블럭은 회전 가능
 
-# Please write your code here.
+N, M = map(int, input().split())
+grid = [list(map(int, input().split())) for i in range(N)]
 
-def block_sum(i, j):
-    temp = []
+ans = 0 
 
-    # 일자 바
-    # 가로
-    if j + 2 < m:
-        temp.append(sum(grid[i][j:j+3]))
-    # 세로
-    if i + 2 < n:
-        temp.append(sum(grid_temp[j] for grid_temp in grid[i:i+3]))
-    
-    # ㄱ 바
-    if i + 1 < n and j + 1 < m:
-        temp.append(sum([grid[i][j], grid[i+1][j], grid[i+1][j+1]]))
-        temp.append(sum([grid[i][j], grid[i+1][j], grid[i][j+1]]))
-        temp.append(sum([grid[i][j], grid[i][j+1], grid[i+1][j+1]]))
-        temp.append(sum([grid[i+1][j+1], grid[i][j+1], grid[i+1][j]]))
+# 1. 일자
+for i in range(N):
+    for j in range(M-3+1):
+        ans = max(ans, sum(grid[i][j:j+3]))
 
-    if temp:
-        return max(temp)
-    else:
-        return 0
+# 2. 세로
+for j in range(M):
+    for i in range(N-3+1):
+        ans = max(ans, grid[i][j] + grid[i+1][j] + grid[i+2][j])
+
+# 3. ㄱ자
+for i in range(N-1):
+    for j in range(M-1):
+        ans = max(ans, grid[i][j] + grid[i+1][j] + grid[i+1][j+1])
+        ans = max(ans, grid[i][j] + grid[i][j+1] + grid[i+1][j])
+        ans = max(ans, grid[i][j] + grid[i][j+1] + grid[i+1][j+1])
+        ans = max(ans, grid[i][j+1] + grid[i+1][j] + grid[i+1][j+1])
 
 
-max_value = 0
-
-for i in range(n):
-    for j in range(m):
-        max_value = max(max_value, block_sum(i, j)) 
-
-print(max_value)
+print(ans)
