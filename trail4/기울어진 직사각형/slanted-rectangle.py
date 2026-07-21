@@ -11,62 +11,33 @@
 N = int(input())
 matrix = [list(map(int, input().split())) for _ in range(N)]
 
-res = 0
+ans = 0
 
+def is_range(ci, cj):
+    return 0 <= ci < N and 0 <= cj < N
 
-def get_sum(ci, cj, len_one, len_two):
-    ret = 0
-    # 1번
-    di, dj = -1, 1
-    for one in range(len_one):
-        ni, nj = ci + di, cj + dj
-        if 0 <= ni < N and 0 <= nj < N:
-            ret += matrix[ni][nj]
+def get_score(ci, cj, w, h):
+    dis, djs = [-1, -1, 1, 1], [1, -1, -1, 1]
+    move_nums = [w, h, w, h]
+
+    temp = 0
+
+    for di, dj, move_num in zip(dis, djs, move_nums):
+        for _ in range(move_num):
+            ni, nj = ci + di, cj + dj
+
+            if not is_range(ni, nj):
+                return 0
+            
+            temp += matrix[ni][nj]
             ci, cj = ni, nj
-        else:
-            return 0 
-    # 2번
-    di, dj = -1, -1
-    for one in range(len_two):
-        ni, nj = ci + di, cj + dj
-        if 0 <= ni < N and 0 <= nj < N:
-            ret += matrix[ni][nj]
-            ci, cj = ni, nj
-        else:
-            return 0 
 
-    # 3번
-    di, dj = 1, -1
-    for one in range(len_one):
-        ni, nj = ci + di, cj + dj
-        if 0 <= ni < N and 0 <= nj < N:
-            ret += matrix[ni][nj]
-            ci, cj = ni, nj
-        else:
-            return 0 
+    return temp
 
-    # 4번
-    di, dj = 1, 1
-    for one in range(len_two):
-        ni, nj = ci + di, cj + dj
-        if 0 <= ni < N and 0 <= nj < N:
-            ret += matrix[ni][nj]
-            ci, cj = ni, nj
-        else:
-            return 0 
-    return ret
+for i in range(N):
+    for j in range(N):
+        for w in range(1, N):
+            for h in range(1, N):
+                ans = max(ans, get_score(i, j, w, h))
 
-# len_one + len_two <= N-1
-for len_one in range(1, N-1):
-    for len_two in range(1, N-1):
-        if len_one + len_two > N-1:
-            continue
-
-        for i in range(N):
-            for j in range(N):
-                diamond_sum = get_sum(i, j, len_one, len_two)
-                if diamond_sum != 0:
-                    res = max(res, diamond_sum)
-
-print(res)
-                
+print(ans)
