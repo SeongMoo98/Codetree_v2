@@ -2,8 +2,6 @@
 # 원소값 <= 100,000
 # Radix sort 구현
 
-
-
 def radix_sort(arr, k):
     """
     arr: 정렬할 리스트
@@ -23,12 +21,11 @@ def radix_sort(arr, k):
 
     return arr
 
-
 N = int(input())
 arr = list(map(int, input().split()))
 
 max_val = max(arr)
-k = len(str(max_val))  # 최대값의 자릿수만큼만 돌리면 충분
+K = len(str(max_val))  # 최대값의 자릿수만큼만 돌리면 충분
 
-result = radix_sort(arr, k)
+result = radix_sort(arr, K)
 print(' '.join(map(str, result)))
